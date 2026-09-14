@@ -1,5 +1,14 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-  redirect("/orders");
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/orders");
+  }, [router]);
+
+  return null;
 }

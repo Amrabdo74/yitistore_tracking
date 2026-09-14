@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -12,6 +11,7 @@ import { FailDeliverySheet } from "@/components/fail-delivery-sheet";
 import { StatusBadge } from "@/components/status-badge";
 import { ErrorState, PageSpinner } from "@/components/states";
 import { Button } from "@/components/ui/button";
+import { useOrderId } from "@/hooks/use-order-id";
 import { NEXT_STATUS } from "@/lib/constants";
 import { formatAmount, formatOrderNumber } from "@/lib/format";
 import { ApiError } from "@/lib/api";
@@ -24,14 +24,14 @@ const PRIMARY_LABEL: Partial<Record<OrderStatus, string>> = {
 };
 
 function DriverOrderInner() {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+  const id = useOrderId();
   const queryClient = useQueryClient();
   const [failOpen, setFailOpen] = useState(false);
 
   const query = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrder(id),
+    enabled: Boolean(id),
   });
 
   const mutation = useMutation({
@@ -181,7 +181,9 @@ function Field({
 export default function DriverOrderDetailsPage() {
   return (
     <AuthGuard>
-      <DriverOrderInner />
+      <Suspense fallback={<PageSpinner />}>
+        <DriverOrderInner />
+      </Suspense>
     </AuthGuard>
   );
 }

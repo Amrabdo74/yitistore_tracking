@@ -109,7 +109,7 @@ function DriverOrdersInner() {
             <p className="mt-1 text-sm text-muted">{order.address}</p>
             <p className="mt-2 text-sm font-medium">{formatAmount(order.amount)}</p>
             <Button asChild variant="outline" size="xl" className="mt-4 w-full">
-              <Link href={`/driver/orders/${order.id}`}>عرض التفاصيل</Link>
+              <Link href={`/driver/orders/view?id=${order.id}`}>عرض التفاصيل</Link>
             </Button>
           </article>
         ))}

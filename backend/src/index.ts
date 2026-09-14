@@ -1,28 +1,53 @@
+import fs from "fs";
 import path from "path";
-import next from "next";
+import express from "express";
 import { createApp } from "./app";
 import { config } from "./config";
 import { prisma } from "./lib/prisma";
 import { ensureDefaultUsers } from "./lib/seedUsers";
 
+function attachFrontend(app: express.Express) {
+  const outDir = path.resolve(process.cwd(), "frontend", "out");
+  if (!fs.existsSync(outDir)) {
+    console.error(`Frontend export not found at ${outDir}`);
+    return;
+  }
+
+  app.use(express.static(outDir));
+  app.use((req, res, next) => {
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      next();
+      return;
+    }
+    if (req.path.startsWith("/api")) {
+      next();
+      return;
+    }
+
+    const candidates = [
+      path.join(outDir, req.path, "index.html"),
+      path.join(outDir, `${req.path.replace(/\/$/, "")}.html`),
+      path.join(outDir, "index.html"),
+    ];
+    const file = candidates.find((candidate) => fs.existsSync(candidate));
+    if (file) {
+      res.sendFile(file);
+      return;
+    }
+    next();
+  });
+}
+
 async function main() {
   await ensureDefaultUsers();
 
   const app = createApp();
-
   if (config.isProd) {
-    const frontendDir = path.resolve(__dirname, "../../frontend");
-    const nextApp = next({
-      dev: false,
-      dir: frontendDir,
-    });
-    await nextApp.prepare();
-    const handle = nextApp.getRequestHandler();
-    app.use((req, res) => handle(req, res));
+    attachFrontend(app);
   }
 
-  app.listen(config.port, () => {
-    console.log(`Server running on port ${config.port}`);
+  app.listen(config.port, "0.0.0.0", () => {
+    console.log(`Server running on 0.0.0.0:${config.port}`);
   });
 }
 

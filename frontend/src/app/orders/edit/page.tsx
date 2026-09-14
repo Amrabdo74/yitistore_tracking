@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
@@ -9,19 +10,20 @@ import { AdminHeader } from "@/components/admin-header";
 import { AuthGuard } from "@/components/auth-guard";
 import { OrderForm } from "@/components/order-form";
 import { ErrorState, PageSpinner } from "@/components/states";
+import { useOrderId } from "@/hooks/use-order-id";
 import { ApiError } from "@/lib/api";
 import { getOrder, updateOrder } from "@/lib/orders-api";
 import type { OrderFormValues } from "@/lib/types";
 
 function EditOrderInner() {
-  const params = useParams<{ id: string }>();
+  const id = useOrderId();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const id = params.id;
 
   const query = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrder(id),
+    enabled: Boolean(id),
   });
 
   const mutation = useMutation({
@@ -30,7 +32,7 @@ function EditOrderInner() {
       toast.success("تم حفظ التعديلات");
       await queryClient.invalidateQueries({ queryKey: ["orders"] });
       await queryClient.invalidateQueries({ queryKey: ["order", id] });
-      router.push(`/orders/${id}`);
+      router.push(`/orders/view?id=${id}`);
     },
     onError: (error) => {
       toast.error(error instanceof ApiError ? error.message : "حدث خطأ، حاول مرة أخرى");
@@ -43,7 +45,10 @@ function EditOrderInner() {
     <div className="min-h-screen bg-page">
       <AdminHeader />
       <main className="mx-auto max-w-xl px-4 py-6">
-        <Link href={`/orders/${id}`} className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink">
+        <Link
+          href={`/orders/view?id=${id}`}
+          className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink"
+        >
           <ArrowRight className="h-4 w-4" />
           العودة للتفاصيل
         </Link>
@@ -79,7 +84,9 @@ function EditOrderInner() {
 export default function EditOrderPage() {
   return (
     <AuthGuard adminOnly>
-      <EditOrderInner />
+      <Suspense fallback={<PageSpinner />}>
+        <EditOrderInner />
+      </Suspense>
     </AuthGuard>
   );
 }

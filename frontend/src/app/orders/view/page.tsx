@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
@@ -14,26 +14,28 @@ import { OrderTimeline } from "@/components/order-timeline";
 import { StatusBadge } from "@/components/status-badge";
 import { ErrorState, PageSpinner } from "@/components/states";
 import { Button } from "@/components/ui/button";
+import { useOrderId } from "@/hooks/use-order-id";
 import { formatAmount, formatOrderNumber } from "@/lib/format";
 import { ApiError } from "@/lib/api";
 import { deleteOrder, getOrder, getOrderHistory } from "@/lib/orders-api";
 
 function OrderDetailsInner() {
-  const params = useParams<{ id: string }>();
+  const id = useOrderId();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const id = params.id;
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const orderQuery = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrder(id),
+    enabled: Boolean(id),
     refetchInterval: 8000,
   });
 
   const historyQuery = useQuery({
     queryKey: ["order-history", id],
     queryFn: () => getOrderHistory(id),
+    enabled: Boolean(id),
     refetchInterval: 8000,
   });
 
@@ -115,7 +117,7 @@ function OrderDetailsInner() {
               </div>
               <div className="mt-4 flex gap-2">
                 <Button asChild variant="outline">
-                  <Link href={`/orders/${order.id}/edit`}>تعديل</Link>
+                  <Link href={`/orders/edit?id=${order.id}`}>تعديل</Link>
                 </Button>
                 <Button variant="danger" onClick={() => setConfirmDelete(true)}>
                   حذف
@@ -151,7 +153,9 @@ function OrderDetailsInner() {
 export default function OrderDetailsPage() {
   return (
     <AuthGuard adminOnly>
-      <OrderDetailsInner />
+      <Suspense fallback={<PageSpinner />}>
+        <OrderDetailsInner />
+      </Suspense>
     </AuthGuard>
   );
 }

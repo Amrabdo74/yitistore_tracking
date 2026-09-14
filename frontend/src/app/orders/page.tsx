@@ -186,7 +186,7 @@ function OrdersPageInner() {
                     <TableRow
                       key={order.id}
                       className="cursor-pointer"
-                      onClick={() => router.push(`/orders/${order.id}`)}
+                      onClick={() => router.push(`/orders/view?id=${order.id}`)}
                     >
                       <TableCell className="font-medium text-navy">
                         {formatOrderNumber(order.orderNumber)}
@@ -205,11 +205,11 @@ function OrdersPageInner() {
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center gap-2 text-[13px]">
-                          <Link href={`/orders/${order.id}`} className="text-brand hover:underline">
+                          <Link href={`/orders/view?id=${order.id}`} className="text-brand hover:underline">
                             عرض
                           </Link>
                           <Link
-                            href={`/orders/${order.id}/edit`}
+                            href={`/orders/edit?id=${order.id}`}
                             className="text-navy hover:underline"
                           >
                             تعديل
