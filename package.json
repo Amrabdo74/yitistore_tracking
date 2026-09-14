@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm run prisma:deploy --prefix backend && node server.js",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",
-    "postinstall": "npm install --prefix backend && npm install --prefix frontend",
+    "postinstall": "npm install --prefix backend --include=dev && npm install --prefix frontend --include=dev",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
