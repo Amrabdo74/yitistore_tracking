@@ -45,15 +45,16 @@ Hostinger يحتاج `package.json` في جذر المشروع مع سكربت `
 - Install command: `npm install`
 - Build command: `npm run build`
 - Start command: `npm start`
+- Entry: `server.js`
 
 أضف متغيرات البيئة:
 
 ```
 NODE_ENV=production
-PORT=3000
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE?schema=public
+FRONTEND_URL=https://tracking.yitistore.com
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require
 JWT_SECRET=ضع-مفتاح-قوي-هنا
-FRONTEND_URL=https://your-domain.com
+JWT_EXPIRES_IN=7d
 COOKIE_NAME=yt_session
 ADMIN_EMAIL=admin@yitistore.com
 ADMIN_PASSWORD=Admin123!
@@ -64,9 +65,9 @@ DRIVER_PASSWORD=Driver123!
 ملاحظات:
 
 - استخدم PostgreSQL (من Hostinger أو خدمة مثل Neon).
-- `PORT` غالباً Hostinger يضبطه تلقائياً.
+- لا تضف `PORT` يدوياً؛ Hostinger يضبطه تلقائياً.
 - `FRONTEND_URL` يكون رابط الموقع على Hostinger.
-- أول تشغيل ينشئ حساب الإدارة والمندوب إذا كانت قاعدة البيانات فارغة.
+- أول تشغيل ينشئ الجداول وحساب الإدارة والمندوب تلقائياً. لا تشغّل `prisma migrate` من سكربت `start`.
 
 ## الحالات
 

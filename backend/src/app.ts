@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { config } from "./config";
+import { prisma } from "./lib/prisma";
 import { authRouter } from "./routes/auth";
 import { ordersRouter } from "./routes/orders";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
@@ -19,8 +20,13 @@ export function createApp() {
   app.use(express.json());
   app.use(cookieParser());
 
-  app.get("/api/health", (_req, res) => {
-    res.json({ ok: true });
+  app.get("/api/health", async (_req, res) => {
+    try {
+      const users = await prisma.user.count();
+      res.json({ ok: true, db: true, users });
+    } catch {
+      res.json({ ok: true, db: false, users: 0 });
+    }
   });
 
   app.use("/api/auth", authRouter);

@@ -7,20 +7,20 @@ export async function ensureDefaultUsers() {
   const adminPassword = process.env.ADMIN_PASSWORD ?? "Admin123!";
   const driverPassword = process.env.DRIVER_PASSWORD ?? "Driver123!";
 
-  const existing = await prisma.user.count();
-  if (existing > 0) {
-    return;
-  }
-
   const adminHash = await bcrypt.hash(adminPassword, 10);
   const driverHash = await bcrypt.hash(driverPassword, 10);
 
-  await prisma.user.createMany({
-    data: [
-      { email: adminEmail, password: adminHash, role: "ADMIN" },
-      { email: driverEmail, password: driverHash, role: "DRIVER" },
-    ],
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: { password: adminHash, role: "ADMIN" },
+    create: { email: adminEmail, password: adminHash, role: "ADMIN" },
   });
 
-  console.log("Created default admin and driver accounts");
+  await prisma.user.upsert({
+    where: { email: driverEmail },
+    update: { password: driverHash, role: "DRIVER" },
+    create: { email: driverEmail, password: driverHash, role: "DRIVER" },
+  });
+
+  console.log("Default admin and driver accounts are ready");
 }

@@ -1,4 +1,3 @@
-import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import express from "express";
@@ -6,6 +5,7 @@ import { createApp } from "./app";
 import { config } from "./config";
 import { prisma } from "./lib/prisma";
 import { ensureDefaultUsers } from "./lib/seedUsers";
+import { ensureSchema } from "./lib/ensureSchema";
 
 function findFrontendOut() {
   const candidates = [
@@ -14,14 +14,6 @@ function findFrontendOut() {
     path.resolve(__dirname, "..", "frontend", "out"),
   ];
   return candidates.find((dir) => fs.existsSync(dir));
-}
-
-function findBackendDir() {
-  const candidates = [
-    path.resolve(process.cwd(), "backend"),
-    path.resolve(__dirname, ".."),
-  ];
-  return candidates.find((dir) => fs.existsSync(path.join(dir, "prisma", "schema.prisma")));
 }
 
 function attachFrontend(app: express.Express) {
@@ -57,23 +49,24 @@ function attachFrontend(app: express.Express) {
 }
 
 async function setupDatabase() {
-  const backendDir = findBackendDir();
-  if (!backendDir) {
-    throw new Error("Backend directory not found");
-  }
-
-  const originalUrl = process.env.DATABASE_URL;
-  const directUrl = originalUrl?.replace("-pooler", "");
-
-  execSync("npx prisma db push", {
-    cwd: backendDir,
-    stdio: "inherit",
-    env: {
-      ...process.env,
-      DATABASE_URL: directUrl || originalUrl,
-    },
-  });
+  await ensureSchema();
   await ensureDefaultUsers();
+}
+
+async function setupDatabaseWithRetry() {
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    try {
+      await setupDatabase();
+      console.log("Database ready");
+      return;
+    } catch (error) {
+      console.error(`Database setup attempt ${attempt} failed`);
+      console.error(error);
+      if (attempt < 5) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
+      }
+    }
+  }
 }
 
 async function main() {
@@ -89,13 +82,7 @@ async function main() {
     });
   });
 
-  try {
-    await setupDatabase();
-    console.log("Database ready");
-  } catch (error) {
-    console.error("Database setup failed; API may not work yet");
-    console.error(error);
-  }
+  await setupDatabaseWithRetry();
 }
 
 main().catch(async (error) => {

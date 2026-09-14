@@ -8,7 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "npm run prisma:deploy --prefix backend && node server.js",
+    "start": "node server.js",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",
     "postinstall": "npm install --prefix backend --include=dev && npm install --prefix frontend --include=dev",
     "dev:backend": "npm run dev --prefix backend",
