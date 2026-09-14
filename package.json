@@ -1,0 +1,18 @@
+{
+  "name": "yitistore-tracking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Yiti Store order delivery tracking",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "npm run prisma:deploy --prefix backend && node server.js",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "postinstall": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
+  }
+}

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #0f2942;
+  --brand: #1677ff;
+  --brand-hover: #0b63d8;
+  --page: #f6f8fb;
+  --surface: #ffffff;
+  --line: #e4eaf1;
+  --ink: #142033;
+  --muted: #64748b;
+  --success: #16a36a;
+  --success-bg: #e8f8f1;
+  --warning: #f5a623;
+  --warning-bg: #fff7e6;
+  --danger: #e5484d;
+  --danger-bg: #fdecec;
+  --info: #2583e8;
+  --info-bg: #eaf4ff;
+  --status-new: #64748b;
+  --status-new-bg: #eef2f6;
+  --received: #c67c09;
+  --radius-input: 8px;
+  --radius-button: 8px;
+  --radius-card: 10px;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-status-new: var(--status-new);
+  --color-status-new-bg: var(--status-new-bg);
+  --color-received: var(--received);
+  --font-sans: var(--font-tajawal), "Tajawal", sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+}
+
+html,
+body {
+  background: var(--page);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: #d6e7ff;
+}
+
+input[type="date"] {
+  min-height: 40px;
+}

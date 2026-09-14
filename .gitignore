@@ -1,0 +1,17 @@
+node_modules
+dist
+.next
+.turbo
+*.log
+.env
+.env.local
+.env.*.local
+coverage
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+next-env.d.ts
+.cookie*.txt
+AGENTS.md
+CLAUDE.md
+
