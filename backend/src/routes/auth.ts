@@ -32,7 +32,7 @@ authRouter.post("/login", async (req, res, next) => {
 
     const result = await login(parsed.data.email, parsed.data.password);
     res.cookie(config.cookieName, result.token, cookieOptions());
-    res.json({ user: result.user });
+    res.json({ user: result.user, token: result.token });
   } catch (error) {
     next(error);
   }

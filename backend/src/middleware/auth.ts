@@ -18,12 +18,20 @@ declare global {
   }
 }
 
+function readToken(req: Request): string | undefined {
+  const header = req.headers.authorization;
+  if (header?.startsWith("Bearer ")) {
+    return header.slice(7).trim();
+  }
+  return req.cookies?.[config.cookieName] as string | undefined;
+}
+
 export function requireAuth(
   req: Request,
   _res: Response,
   next: NextFunction,
 ): void {
-  const token = req.cookies?.[config.cookieName] as string | undefined;
+  const token = readToken(req);
 
   if (!token) {
     next(new AppError("يجب تسجيل الدخول أولاً", 401));

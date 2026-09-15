@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { config } from "./config";
 import { prisma } from "./lib/prisma";
 import { authRouter } from "./routes/auth";
 import { ordersRouter } from "./routes/orders";
@@ -13,7 +12,7 @@ export function createApp() {
 
   app.use(
     cors({
-      origin: config.isProd ? true : config.frontendUrl,
+      origin: true,
       credentials: true,
     }),
   );
