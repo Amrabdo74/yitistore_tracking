@@ -1,4 +1,4 @@
-import type { OrderStatus } from "./types";
+import type { Currency, OrderStatus } from "./types";
 
 export const STATUS_LABELS: Record<OrderStatus, string> = {
   NEW: "طلب جديد",
@@ -45,4 +45,16 @@ export const FAILURE_REASONS = [
 export const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
   NEW: "RECEIVED",
   RECEIVED: "ARRIVED",
+};
+
+export const CURRENCIES = ["AED", "OMR"] as const;
+
+export const CURRENCY_LABELS: Record<Currency, string> = {
+  AED: "درهم إماراتي",
+  OMR: "ريال عماني",
+};
+
+export const CURRENCY_SUFFIX: Record<Currency, string> = {
+  AED: "د.إ",
+  OMR: "ر.ع",
 };

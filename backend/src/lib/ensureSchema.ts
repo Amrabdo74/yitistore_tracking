@@ -20,6 +20,13 @@ export async function ensureSchema() {
     END $$;
   `);
   await run(`
+    DO $$ BEGIN
+      CREATE TYPE "Currency" AS ENUM ('AED', 'OMR');
+    EXCEPTION
+      WHEN duplicate_object THEN null;
+    END $$;
+  `);
+  await run(`
     CREATE TABLE IF NOT EXISTS "User" (
       "id" TEXT NOT NULL,
       "email" TEXT NOT NULL,
@@ -38,6 +45,7 @@ export async function ensureSchema() {
       "address" TEXT NOT NULL,
       "description" TEXT NOT NULL DEFAULT '',
       "amount" DECIMAL(10,2) NOT NULL,
+      "currency" "Currency" NOT NULL DEFAULT 'AED',
       "status" "OrderStatus" NOT NULL DEFAULT 'NEW',
       "failureReason" TEXT,
       "notes" TEXT,
@@ -55,6 +63,10 @@ export async function ensureSchema() {
       "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
       CONSTRAINT "OrderStatusHistory_pkey" PRIMARY KEY ("id")
     )
+  `);
+  await run(`
+    ALTER TABLE "Order"
+    ADD COLUMN IF NOT EXISTS "currency" "Currency" NOT NULL DEFAULT 'AED'
   `);
   await run(`CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email")`);
   await run(`CREATE UNIQUE INDEX IF NOT EXISTS "Order_orderNumber_key" ON "Order"("orderNumber")`);

@@ -15,6 +15,7 @@ export const orderSchema = z.object({
   address: z.string().trim().min(4, "العنوان مطلوب"),
   description: z.string().trim().optional().default(""),
   amount: z.coerce.number().positive("أدخل مبلغاً صحيحاً"),
+  currency: z.enum(["AED", "OMR"], { errorMap: () => ({ message: "اختر العملة" }) }),
   notes: z.string().trim().optional().default(""),
 });
 

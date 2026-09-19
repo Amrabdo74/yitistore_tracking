@@ -196,7 +196,7 @@ function OrdersPageInner() {
                         {order.phone}
                       </TableCell>
                       <TableCell className="max-w-[180px] truncate">{order.address}</TableCell>
-                      <TableCell>{formatAmount(order.amount)}</TableCell>
+                      <TableCell>{formatAmount(order.amount, order.currency)}</TableCell>
                       <TableCell>
                         <StatusBadge status={order.status} />
                       </TableCell>

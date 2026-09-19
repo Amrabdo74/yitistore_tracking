@@ -99,7 +99,7 @@ function OrderDetailsInner() {
                 </div>
                 <div>
                   <dt className="text-xs text-muted">المبلغ</dt>
-                  <dd className="mt-1 text-sm font-medium">{formatAmount(order.amount)}</dd>
+                  <dd className="mt-1 text-sm font-medium">{formatAmount(order.amount, order.currency)}</dd>
                 </div>
                 <div>
                   <dt className="text-xs text-muted">الملاحظات</dt>

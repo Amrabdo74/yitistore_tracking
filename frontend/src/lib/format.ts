@@ -1,8 +1,11 @@
-export function formatAmount(amount: number): string {
+import type { Currency } from "./types";
+import { CURRENCY_SUFFIX } from "./constants";
+
+export function formatAmount(amount: number, currency: Currency = "AED"): string {
   return `${new Intl.NumberFormat("ar-EG-u-nu-latn", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
-  }).format(amount)} ج.م`;
+  }).format(amount)} ${CURRENCY_SUFFIX[currency] ?? CURRENCY_SUFFIX.AED}`;
 }
 
 export function formatDateTime(value: string): string {

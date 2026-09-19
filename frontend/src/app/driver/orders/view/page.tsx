@@ -85,7 +85,7 @@ function DriverOrderInner() {
               <Field label="رقم الهاتف" value={order.phone} ltr />
               <Field label="العنوان" value={order.address} />
               <Field label="وصف الطلب" value={order.description || "—"} />
-              <Field label="المبلغ" value={formatAmount(order.amount)} />
+              <Field label="المبلغ" value={formatAmount(order.amount, order.currency)} />
               <Field label="ملاحظات" value={order.notes || "—"} />
               {order.status === "FAILED" && order.failureReason ? (
                 <Field label="سبب تعذر التسليم" value={order.failureReason} />

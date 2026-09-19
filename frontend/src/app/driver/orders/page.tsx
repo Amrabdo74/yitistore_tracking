@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { AuthGuard } from "@/components/auth-guard";
+import { BrandLogo } from "@/components/brand-logo";
 import { StatusBadge } from "@/components/status-badge";
 import { CardsSkeleton, EmptyOrders, EmptySearch, ErrorState } from "@/components/states";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,10 @@ function DriverOrdersInner() {
     <div className="mx-auto min-h-screen max-w-lg bg-page pb-8">
       <header className="sticky top-0 z-20 border-b border-line bg-surface px-4 pt-4 pb-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-navy">طلباتي اليوم</h1>
+          <div className="flex items-center gap-2.5">
+            <BrandLogo size={36} />
+            <h1 className="text-lg font-bold text-navy">طلباتي اليوم</h1>
+          </div>
           <Button
             variant="ghost"
             size="sm"
@@ -107,7 +111,7 @@ function DriverOrdersInner() {
             </div>
             <p className="mt-2 text-sm font-medium text-ink">{order.customerName}</p>
             <p className="mt-1 text-sm text-muted">{order.address}</p>
-            <p className="mt-2 text-sm font-medium">{formatAmount(order.amount)}</p>
+            <p className="mt-2 text-sm font-medium">{formatAmount(order.amount, order.currency)}</p>
             <Button asChild variant="outline" size="xl" className="mt-4 w-full">
               <Link href={`/driver/orders/view?id=${order.id}`}>عرض التفاصيل</Link>
             </Button>

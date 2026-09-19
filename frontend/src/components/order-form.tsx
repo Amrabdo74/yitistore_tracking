@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CURRENCIES, CURRENCY_LABELS } from "@/lib/constants";
 import { orderSchema, type OrderSchema } from "@/lib/validations";
 import type { OrderFormValues } from "@/lib/types";
 
@@ -28,6 +29,7 @@ export function OrderForm({
       address: defaultValues?.address ?? "",
       description: defaultValues?.description ?? "",
       amount: defaultValues?.amount ?? undefined,
+      currency: defaultValues?.currency ?? "AED",
       notes: defaultValues?.notes ?? "",
     },
   });
@@ -42,6 +44,7 @@ export function OrderForm({
           address: values.address,
           description: values.description ?? "",
           amount: values.amount,
+          currency: values.currency,
           notes: values.notes ?? "",
         });
       })}
@@ -73,20 +76,39 @@ export function OrderForm({
         <Label htmlFor="description">وصف الطلب</Label>
         <Textarea id="description" {...form.register("description")} />
       </div>
-      <div>
-        <Label htmlFor="amount">المبلغ</Label>
-        <Input
-          id="amount"
-          type="number"
-          step="0.01"
-          min="0"
-          dir="ltr"
-          className="text-start"
-          {...form.register("amount")}
-        />
-        {form.formState.errors.amount ? (
-          <p className="mt-1 text-xs text-danger">{form.formState.errors.amount.message}</p>
-        ) : null}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="amount">المبلغ</Label>
+          <Input
+            id="amount"
+            type="number"
+            step="0.01"
+            min="0"
+            dir="ltr"
+            className="text-start"
+            {...form.register("amount")}
+          />
+          {form.formState.errors.amount ? (
+            <p className="mt-1 text-xs text-danger">{form.formState.errors.amount.message}</p>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="currency">العملة</Label>
+          <select
+            id="currency"
+            {...form.register("currency")}
+            className="h-10 w-full rounded-[8px] border border-line bg-surface px-3 text-sm text-ink outline-none focus:border-brand"
+          >
+            {CURRENCIES.map((value) => (
+              <option key={value} value={value}>
+                {CURRENCY_LABELS[value]}
+              </option>
+            ))}
+          </select>
+          {form.formState.errors.currency ? (
+            <p className="mt-1 text-xs text-danger">{form.formState.errors.currency.message}</p>
+          ) : null}
+        </div>
       </div>
       <div>
         <Label htmlFor="notes">ملاحظات</Label>

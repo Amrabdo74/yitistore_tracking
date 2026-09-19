@@ -2,6 +2,8 @@ export type Role = "ADMIN" | "DRIVER";
 
 export type OrderStatus = "NEW" | "RECEIVED" | "ARRIVED" | "DELIVERED" | "FAILED";
 
+export type Currency = "AED" | "OMR";
+
 export type User = {
   id: string;
   email: string;
@@ -16,6 +18,7 @@ export type Order = {
   address: string;
   description: string;
   amount: number;
+  currency: Currency;
   status: OrderStatus;
   failureReason: string | null;
   notes: string | null;
@@ -56,5 +59,6 @@ export type OrderFormValues = {
   address: string;
   description: string;
   amount: number;
+  currency: Currency;
   notes: string;
 };

@@ -8,6 +8,7 @@ import * as orderService from "../services/order.service";
 export const ordersRouter = Router();
 
 const statuses = ["NEW", "RECEIVED", "ARRIVED", "DELIVERED", "FAILED"] as const;
+const currencies = ["AED", "OMR"] as const;
 
 const orderBodySchema = z.object({
   customerName: z.string().trim().min(2, "اسم العميل مطلوب"),
@@ -19,6 +20,7 @@ const orderBodySchema = z.object({
   address: z.string().trim().min(4, "العنوان مطلوب"),
   description: z.string().trim().optional().default(""),
   amount: z.coerce.number().positive("أدخل مبلغاً صحيحاً"),
+  currency: z.enum(currencies, { errorMap: () => ({ message: "اختر العملة" }) }),
   notes: z.string().trim().optional(),
 });
 

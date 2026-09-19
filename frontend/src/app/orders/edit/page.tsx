@@ -66,6 +66,7 @@ function EditOrderInner() {
                 address: order.address,
                 description: order.description,
                 amount: order.amount,
+                currency: order.currency,
                 notes: order.notes ?? "",
               }}
               submitLabel="حفظ التعديلات"

@@ -1,4 +1,4 @@
-import { Order, OrderStatus, Prisma } from "@prisma/client";
+import { Currency, Order, OrderStatus, Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 import { AppError } from "../utils/appError";
 import { generateOrderNumber } from "../utils/orderNumber";
@@ -24,6 +24,7 @@ function serializeOrder(order: Order) {
   return {
     ...order,
     amount: Number(order.amount),
+    currency: order.currency ?? "AED",
   };
 }
 
@@ -121,6 +122,7 @@ export async function createOrder(input: {
   address: string;
   description?: string;
   amount: number;
+  currency: Currency;
   notes?: string;
 }) {
   const orderNumber = await generateOrderNumber();
@@ -133,6 +135,7 @@ export async function createOrder(input: {
       address: input.address.trim(),
       description: input.description?.trim() ?? "",
       amount: input.amount,
+      currency: input.currency,
       notes: input.notes?.trim() || null,
       status: "NEW",
       history: {
@@ -152,6 +155,7 @@ export async function updateOrder(
     address: string;
     description?: string;
     amount: number;
+    currency: Currency;
     notes?: string;
   },
 ) {
@@ -168,6 +172,7 @@ export async function updateOrder(
       address: input.address.trim(),
       description: input.description?.trim() ?? "",
       amount: input.amount,
+      currency: input.currency,
       notes: input.notes?.trim() || null,
     },
   });
