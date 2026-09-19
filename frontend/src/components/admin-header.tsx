@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/use-me";
 import { logoutRequest } from "@/lib/orders-api";
@@ -28,9 +29,7 @@ export function AdminHeader() {
     <header className="border-b border-[#0b2136] bg-navy text-white">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link href="/orders" className="flex items-center gap-2.5">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-[8px] bg-white/10 text-sm font-bold">
-            ي
-          </span>
+          <BrandLogo size={32} className="rounded-[8px] ring-1 ring-white/10" />
           <span className="leading-tight">
             <span className="block text-sm font-medium">يتي ستور</span>
             <span className="block text-[11px] text-white/65">تتبع التوصيل</span>

@@ -13,6 +13,10 @@ const tajawal = Tajawal({
 export const metadata: Metadata = {
   title: "تتبع التوصيل | يتي ستور",
   description: "نظام بسيط لتتبع طلبات التوصيل",
+  icons: {
+    icon: "/logo.webp",
+    apple: "/logo.webp",
+  },
 };
 
 export default function RootLayout({

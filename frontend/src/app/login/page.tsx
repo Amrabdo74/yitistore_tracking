@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,10 +35,12 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-[400px] overflow-hidden rounded-[10px] border border-line bg-surface">
-        <div className="h-1.5 bg-navy" />
+        <div className="flex flex-col items-center bg-black px-6 py-6">
+          <BrandLogo size={96} className="rounded-[12px]" />
+          <p className="mt-3 text-sm font-medium text-white">يتي ستور</p>
+        </div>
         <div className="px-6 py-7">
-          <p className="text-xs font-medium tracking-wide text-muted">يتي ستور</p>
-          <h1 className="mt-1 text-xl font-bold text-navy">تسجيل الدخول</h1>
+          <h1 className="text-xl font-bold text-navy">تسجيل الدخول</h1>
           <p className="mt-1 text-sm text-muted">أدخل بيانات حسابك للمتابعة</p>
 
           <form
